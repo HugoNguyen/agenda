@@ -1,0 +1,76 @@
+services:
+  bookingguru.api:
+    image: ${DOCKER_REGISTRY-}bookingguruapi
+    container_name: BookingGuru.Api
+    build:
+      context: src
+      dockerfile: APIs/BookingGuru.Api/Dockerfile
+    ports:
+      - 5000:8080
+      - 5001:8081
+
+  bookingguru.database:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: BookingGuru.Database
+    user: root
+    environment:
+      - SA_PASSWORD=123!@#qweQWE
+      - ACCEPT_EULA=Y
+    # volumes:
+    #   - ./.containers/db:/var/opt/mssql
+    ports:
+      - 11433:1433
+
+  bookingguru.identity:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: BookingGuru.Identity
+    command: start-dev
+    # command: start-dev --import-realm
+    environment:
+      - KC_HEALTH_ENABLED=true
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+    # volumes:
+    #   - ./.containers/identity:/opt/keycloak/data
+    #   - ./.files:/opt/keycloak/data/import
+    ports:
+      - 18080:8080
+
+  bookingguru.seq:
+    image: datalust/seq:latest
+    container_name: BookingGuru.Seq
+    environment:
+      - ACCEPT_EULA=Y
+      - SEQ_FIRSTRUN_NOAUTHENTICATION=True
+    ports:
+      - 5341:5341
+      - 8081:80
+
+  bookingguru.redis:
+    image: redis:latest
+    container_name: BookingGuru.Redis
+    restart: always
+    ports:
+      - 6379:6379
+
+  bookingguru.jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: BookingGuru.Jaeger
+    ports:
+      - 4317:4317
+      - 4318:4318
+      - 16686:16686
+
+  bookingguru.queue:
+    image: rabbitmq:management-alpine
+    container_name: BookingGuru.Queue
+    hostname: evently-queue
+    volumes:
+        - ./.containers/queue/data/:/var/lib/rabbitmq
+        - ./.containers/queue/log/:/var/log/rabbitmq
+    environment:
+        RABBITMQ_DEFAULT_USER: guest
+        RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      - 5672:5672
+      - 15672:15672
