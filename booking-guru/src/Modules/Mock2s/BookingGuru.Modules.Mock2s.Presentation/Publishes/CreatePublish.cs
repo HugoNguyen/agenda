@@ -14,7 +14,7 @@ internal sealed class CreatePublish : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("first-entities", async ([FromBody] Request request, ISender sender) =>
+        app.MapPost("publishes", async ([FromBody] Request request, ISender sender) =>
         {
             Result<Guid> result = await sender.Send(new CreatePublishCommand(request.Name, request.Publish));
 
