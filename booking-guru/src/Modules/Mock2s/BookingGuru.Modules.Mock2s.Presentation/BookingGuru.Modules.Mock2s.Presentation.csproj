@@ -1,0 +1,6 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Common\BookingGuru.Common.Presentation\BookingGuru.Common.Presentation.csproj" />
+    <ProjectReference Include="..\BookingGuru.Modules.Mock2s.Application\BookingGuru.Modules.Mock2s.Application.csproj" />
+  </ItemGroup>
+</Project>

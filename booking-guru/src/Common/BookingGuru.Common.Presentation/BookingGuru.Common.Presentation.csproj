@@ -1,0 +1,11 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="MassTransit.Abstractions" Version="8.5.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BookingGuru.Common.Domain\BookingGuru.Common.Domain.csproj" />
+  </ItemGroup>
+</Project>
