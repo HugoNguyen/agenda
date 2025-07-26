@@ -5,7 +5,6 @@
 //     This interface is implemented by entities which wanted to store deletion information
 //     (who and when deleted).
 public interface IDeletionAudited<TUserPrimaryKey> : IHasDeletionTime
-    where TUserPrimaryKey : struct
 {
     //
     // Summary:

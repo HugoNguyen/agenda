@@ -5,7 +5,7 @@ public abstract class Entity : IEntity
     public abstract object?[] GetKeys();
 }
 
-public abstract class Entity<TPrimaryKey> : Entity, IEntity<TPrimaryKey> where TPrimaryKey : struct
+public abstract class Entity<TPrimaryKey> : Entity, IEntity<TPrimaryKey>
 {
     /// <summary>
     /// Unique identifier for this entity.

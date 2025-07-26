@@ -5,7 +5,7 @@
 //     This interface is implemented by entities that is wanted to store modification
 //     information (who and when modified lastly). Properties are automatically set
 //     when updating the Domain.Entities.IEntity.
-public interface IModificationAudited<TUserPrimaryKey> : IHasModificationTime where TUserPrimaryKey : struct
+public interface IModificationAudited<TUserPrimaryKey> : IHasModificationTime
 {
     //
     // Summary:
@@ -21,7 +21,7 @@ public interface IModificationAudited<TUserPrimaryKey> : IHasModificationTime wh
 // Type parameters:
 //   TUser:
 //     Type of the user
-public interface IModificationAudited<TUser, TUserPrimaryKey> : IModificationAudited<TUserPrimaryKey> where TUser : IEntity<TUserPrimaryKey> where TUserPrimaryKey : struct
+public interface IModificationAudited<TUser, TUserPrimaryKey> : IModificationAudited<TUserPrimaryKey> where TUser : IEntity<TUserPrimaryKey>
 {
     //
     // Summary:

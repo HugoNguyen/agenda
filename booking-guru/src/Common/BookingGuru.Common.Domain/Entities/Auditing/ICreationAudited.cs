@@ -5,7 +5,7 @@
 //     This interface is implemented by entities that is wanted to store creation information
 //     (who and when created). Creation time and creator user are automatically set
 //     when saving Domain.Entities.Entity to database.
-public interface ICreationAudited<TUserPrimaryKey> : IHasCreationTime where TUserPrimaryKey : struct
+public interface ICreationAudited<TUserPrimaryKey> : IHasCreationTime
 {
     //
     // Summary:
@@ -21,7 +21,7 @@ public interface ICreationAudited<TUserPrimaryKey> : IHasCreationTime where TUse
 // Type parameters:
 //   TUser:
 //     Type of the user
-public interface ICreationAudited<TUser, TUserPrimaryKey> : ICreationAudited<TUserPrimaryKey> where TUser : IEntity<TUserPrimaryKey> where TUserPrimaryKey : struct
+public interface ICreationAudited<TUser, TUserPrimaryKey> : ICreationAudited<TUserPrimaryKey> where TUser : IEntity<TUserPrimaryKey>
 {
     //
     // Summary:

@@ -1,10 +1,12 @@
-﻿namespace BookingGuru.Common.Domain.Entities.Auditing;
+﻿using BookingGuru.Common.Domain.Entities.Auditing;
 
-public abstract class FullAuditedEntity<TPrimaryKey, TUserPrimaryKey> : AuditedEntity<TPrimaryKey, TUserPrimaryKey>, IFullAudited<TUserPrimaryKey>
+namespace BookingGuru.Common.Domain.Entities;
+
+public abstract class DomainFullAuditedEntity<TPrimaryKey, TUserPrimaryKey> : DomainAuditedEntity<TPrimaryKey, TUserPrimaryKey>, IFullAudited<TUserPrimaryKey>
 {
-    protected FullAuditedEntity() { }
+    protected DomainFullAuditedEntity() { }
 
-    protected FullAuditedEntity(TPrimaryKey id) : base(id) { }
+    protected DomainFullAuditedEntity(TPrimaryKey id) : base(id) { }
 
     /// <summary>
     /// Is this entity Deleted?
@@ -22,12 +24,12 @@ public abstract class FullAuditedEntity<TPrimaryKey, TUserPrimaryKey> : AuditedE
     public virtual DateTimeOffset? DeletionTime { get; set; }
 }
 
-public abstract class FullAuditedEntity<TPrimaryKey, TUser, TUserPrimaryKey> : AuditedEntity<TPrimaryKey, TUser, TUserPrimaryKey>, IFullAudited<TUserPrimaryKey>
+public abstract class DomainFullAuditedEntity<TPrimaryKey, TUser, TUserPrimaryKey> : DomainAuditedEntity<TPrimaryKey, TUser, TUserPrimaryKey>, IFullAudited<TUserPrimaryKey>
     where TUser : IEntity<TUserPrimaryKey>
 {
-    protected FullAuditedEntity() { }
+    protected DomainFullAuditedEntity() { }
 
-    protected FullAuditedEntity(TPrimaryKey id) : base(id) { }
+    protected DomainFullAuditedEntity(TPrimaryKey id) : base(id) { }
 
     /// <summary>
     /// Is this entity Deleted?
