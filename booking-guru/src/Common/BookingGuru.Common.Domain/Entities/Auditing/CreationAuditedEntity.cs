@@ -5,8 +5,6 @@
 /// </summary>
 /// <typeparam name="TPrimaryKey">Type of the primary key of the entity</typeparam>
 public abstract class CreationAuditedEntity<TPrimaryKey, TUserPrimaryKey> : Entity<TPrimaryKey>, ICreationAudited<TUserPrimaryKey>
-    where TPrimaryKey : struct
-    where TUserPrimaryKey : struct
 {
     protected CreationAuditedEntity()
     {
@@ -28,9 +26,7 @@ public abstract class CreationAuditedEntity<TPrimaryKey, TUserPrimaryKey> : Enti
 /// <typeparam name="TPrimaryKey">Type of the primary key of the entity</typeparam>
 /// <typeparam name="TUser">Type of the user</typeparam>
 public abstract class CreationAuditedEntity<TPrimaryKey, TUser, TUserPrimaryKey> : CreationAuditedEntity<TPrimaryKey, TUserPrimaryKey>
-    where TPrimaryKey : struct
     where TUser : IEntity<TUserPrimaryKey>
-    where TUserPrimaryKey : struct
 {
     protected CreationAuditedEntity()
     {

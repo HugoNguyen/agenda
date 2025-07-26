@@ -1,13 +1,6 @@
 ﻿namespace BookingGuru.Common.Domain.Entities;
 
-public interface IDomainEntity
-{
-    IReadOnlyList<IDomainEvent> DomainEvents  { get; }
-
-    void ClearDomainEvents();
-}
-
-public abstract class DomainEntity<TPrimaryKey> : Entity<TPrimaryKey>, IDomainEntity where TPrimaryKey : struct
+public abstract class DomainEntity<TPrimaryKey> : Entity<TPrimaryKey>, IDomainEntity
 {
     protected DomainEntity() { }
 

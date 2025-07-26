@@ -10,7 +10,7 @@ public interface IEntity
 }
 
 
-public interface IEntity<out TPrimaryKey> : IEntity where TPrimaryKey : struct
+public interface IEntity<out TPrimaryKey> : IEntity
 {
     //
     // Summary:
