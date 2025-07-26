@@ -13,11 +13,11 @@ internal sealed class GetPublishClone : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("first-entities/{id}", async (Guid id, ISender sender) =>
+        app.MapGet("publish-clones/{id}", async (Guid id, ISender sender) =>
         {
             Result<PublishCloneResponse> result = await sender.Send(new GetPublishCloneQuery(id));
 
             return result.Match(Results.Ok, ApiResults.Problem);
-        }).WithTags(Tags.FirstEntities);
+        }).WithTags(Tags.PublishClones);
     }
 }
