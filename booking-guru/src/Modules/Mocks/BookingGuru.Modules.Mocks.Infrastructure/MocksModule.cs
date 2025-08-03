@@ -1,20 +1,20 @@
 ﻿using BookingGuru.Common.Application.EventBus;
 using BookingGuru.Common.Application.Messaging;
+using BookingGuru.Common.Application.Repositories;
 using BookingGuru.Common.Infrastructure.Outbox;
+using BookingGuru.Common.Infrastructure.Repositories;
 using BookingGuru.Common.Presentation.Endpoints;
 using BookingGuru.Modules.Mock2s.IntegrationEvents;
 using BookingGuru.Modules.Mocks.Application.Abstractions.Data;
 using BookingGuru.Modules.Mocks.Infrastructure.Database;
 using BookingGuru.Modules.Mocks.Infrastructure.Inbox;
 using BookingGuru.Modules.Mocks.Infrastructure.Outbox;
-using BookingGuru.Modules.Mocks.Infrastructure.Repositories;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Scrutor;
 
 namespace BookingGuru.Modules.Mocks.Infrastructure;
 
@@ -31,8 +31,6 @@ public static class MocksModule
         services.AddIntegrationEventHandlers();
 
         services.AddInfrastructure(configuration);
-
-        //services.AddGenericRepositories();
 
         services.AddEndpoints(Presentation.AssemblyReference.Assembly);
 
@@ -53,11 +51,12 @@ public static class MocksModule
                     configuration.GetConnectionString("Database"),
                     options => options.MigrationsHistoryTable(HistoryRepository.DefaultTableName, Schemas.Mocks))
                 .UseCamelCaseNamingConvention()
-                .AddInterceptors(sp.GetRequiredService<InsertOutboxMessagesInterceptor>()));
+                .AddInterceptors(sp.GetRequiredService<InsertOutboxMessagesInterceptor>())
+                .AddInterceptors(sp.GetRequiredService<AuditingInterceptor>()));
 
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<MocksDbContext>());
 
-        services.TryAddTransient(typeof(IRepository<,>), typeof(Repository<,>));
+        services.AddRepositories();
 
         services.Configure<OutboxOptions>(configuration.GetSection("Mocks:Outbox"));
 
@@ -113,5 +112,19 @@ public static class MocksModule
 
             services.Decorate(integrationEventHandler, closedIdempotentHandler);
         }
+    }
+
+    private static void AddRepositories(this IServiceCollection services)
+    {
+        services.AddGenericRepositoriesFromAssembly<MocksDbContext>();
+
+        services.Scan(scan => scan
+            .FromAssemblyOf<MocksDbContext>()
+            .AddClasses(c => c.AssignableTo<IDecoratedRepository>())
+            .As(type => type
+                .GetInterfaces()
+                .Where(i => i != typeof(IDecoratedRepository)))
+            .WithTransientLifetime()
+        );
     }
 }

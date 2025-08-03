@@ -1,6 +1,6 @@
 ﻿using BookingGuru.Common.Application.Messaging;
+using BookingGuru.Common.Application.Repositories;
 using BookingGuru.Common.Domain;
-using BookingGuru.Modules.Mocks.Application.Abstractions.Data;
 using BookingGuru.Modules.Mocks.Application.Publishes.GetPublishClone;
 using BookingGuru.Modules.Mocks.Domain.PublishClones;
 using BookingGuru.Modules.Mocks.Domain.Publishes;

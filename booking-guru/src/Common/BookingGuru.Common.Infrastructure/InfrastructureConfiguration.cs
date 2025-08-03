@@ -8,6 +8,7 @@ using BookingGuru.Common.Infrastructure.Caching;
 using BookingGuru.Common.Infrastructure.Data;
 using BookingGuru.Common.Infrastructure.EventBus;
 using BookingGuru.Common.Infrastructure.Outbox;
+using BookingGuru.Common.Infrastructure.Repositories;
 using BookingGuru.Common.Infrastructure.Serialization;
 using BookingGuru.Common.Infrastructure.Timing;
 using Dapper;
@@ -42,6 +43,8 @@ public static class InfrastructureConfiguration
         services.TryAddSingleton<IEventBus, EventBus.EventBus>();
 
         services.TryAddSingleton<InsertOutboxMessagesInterceptor>();
+
+        services.AddScoped<AuditingInterceptor>();
 
         services.TryAddScoped<IDbConnectionFactory>(q => new DbConnectionFactory(databaseConnectionString));
 

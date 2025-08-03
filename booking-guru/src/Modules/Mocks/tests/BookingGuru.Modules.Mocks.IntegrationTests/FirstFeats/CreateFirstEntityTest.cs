@@ -33,7 +33,6 @@ public class CreateFirstEntityTest : BaseIntegrationTest
         Result<FirstEntityResponse> firstEntityResult = await Sender.Send(new GetFirstEntityQuery(newId));
 
         // Assert
-        
         firstEntityResult.Value.Field2Utc.Should().Be(field2);
     }
 

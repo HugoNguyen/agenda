@@ -1,7 +1,5 @@
 ﻿
-using BookingGuru.Common.Infrastructure.Data;
-using BookingGuru.Common.Infrastructure.Inbox;
-using BookingGuru.Common.Infrastructure.Outbox;
+using BookingGuru.Common.Infrastructure.Repositories;
 using BookingGuru.Modules.Mocks.Application.Abstractions.Data;
 using BookingGuru.Modules.Mocks.Domain.FirstFeats;
 using BookingGuru.Modules.Mocks.Domain.PublishClones;
@@ -15,26 +13,26 @@ using System.Data.Common;
 
 namespace BookingGuru.Modules.Mocks.Infrastructure.Database;
 
-public sealed class MocksDbContext(DbContextOptions<MocksDbContext> options) : DbContext(options), IUnitOfWork
+public sealed class MocksDbContext : ModuleDbContext, IUnitOfWork
 {
     internal DbSet<FirstEntity> FirstEntities { get; set; }
     internal DbSet<SecondEntity> SecondEntities { get; set; }
     internal DbSet<User> Users { get; set; }
     internal DbSet<PublishClone> PublishClones { get; set; }
 
+    public MocksDbContext(DbContextOptions<MocksDbContext> options)
+        : base(options, builder => builder.WithDefaultSchema(Schemas.Mocks)
+            .WithInbox()
+            .WithOutbox())
+    {
+    }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         ArgumentNullException.ThrowIfNull(modelBuilder);
 
-        modelBuilder.HasDefaultSchema(Schemas.Mocks);
+        base.OnModelCreating(modelBuilder);
 
-        // Default tables
-        modelBuilder.ApplyConfiguration(new OutboxMessageConfiguration());
-        modelBuilder.ApplyConfiguration(new OutboxMessageConsumerConfiguration());
-        modelBuilder.ApplyConfiguration(new InboxMessageConfiguration());
-        modelBuilder.ApplyConfiguration(new InboxMessageConsumerConfiguration());
-
-        // Module tables
         modelBuilder.ApplyConfiguration(new FirstEntityConfiguration());
 
         modelBuilder.ApplyConfiguration(new UserConfiguration());

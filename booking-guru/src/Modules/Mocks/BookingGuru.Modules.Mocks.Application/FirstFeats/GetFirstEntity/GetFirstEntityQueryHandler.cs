@@ -1,17 +1,18 @@
 ﻿using BookingGuru.Common.Application.Messaging;
+using BookingGuru.Common.Application.Repositories;
 using BookingGuru.Common.Domain;
-using BookingGuru.Modules.Mocks.Application.Abstractions.Data;
+using BookingGuru.Modules.Mocks.Application.Repositories;
 using BookingGuru.Modules.Mocks.Domain.FirstFeats;
 
 namespace BookingGuru.Modules.Mocks.Application.FirstFeats.GetFirstEntity;
 
 internal sealed class GetFirstEntityQueryHandler(
-    IRepository<FirstEntity, Guid> firstEntityRepository)
+    IFirstEntityRepository firstEntityRepository)
     : IQueryHandler<GetFirstEntityQuery, FirstEntityResponse>
 {
     public async Task<Result<FirstEntityResponse>> Handle(GetFirstEntityQuery request, CancellationToken cancellationToken)
     {
-        var entity = await firstEntityRepository.FindByIdAsync(request.Id).ConfigureAwait(true);
+        var entity = await firstEntityRepository.CustomGetAsync(request.Id, cancellationToken).ConfigureAwait(true);
 
         if (entity is null)
         {

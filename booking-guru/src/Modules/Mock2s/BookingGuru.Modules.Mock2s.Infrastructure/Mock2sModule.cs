@@ -1,12 +1,12 @@
 ﻿using BookingGuru.Common.Application.EventBus;
 using BookingGuru.Common.Application.Messaging;
 using BookingGuru.Common.Infrastructure.Outbox;
+using BookingGuru.Common.Infrastructure.Repositories;
 using BookingGuru.Common.Presentation.Endpoints;
 using BookingGuru.Modules.Mock2s.Application.Abstractions.Data;
 using BookingGuru.Modules.Mock2s.Infrastructure.Database;
 using BookingGuru.Modules.Mock2s.Infrastructure.Inbox;
 using BookingGuru.Modules.Mock2s.Infrastructure.Outbox;
-using BookingGuru.Modules.Mock2s.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
@@ -43,11 +43,12 @@ public static class Mock2sModule
                     configuration.GetConnectionString("Database"),
                     options => options.MigrationsHistoryTable(HistoryRepository.DefaultTableName, Schemas.Mock2s))
                 .UseCamelCaseNamingConvention()
-                .AddInterceptors(sp.GetRequiredService<InsertOutboxMessagesInterceptor>()));
+                .AddInterceptors(sp.GetRequiredService<InsertOutboxMessagesInterceptor>())
+                .AddInterceptors(sp.GetRequiredService<AuditingInterceptor>()));
 
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<Mock2sDbContext>());
 
-        services.TryAddTransient(typeof(IRepository<,>), typeof(Repository<,>));
+        services.AddGenericRepositoriesFromAssembly<Mock2sDbContext>();
 
         services.Configure<OutboxOptions>(configuration.GetSection("Mock2s:Outbox"));
 
