@@ -1,6 +1,5 @@
 ﻿
-using BookingGuru.Common.Infrastructure.Inbox;
-using BookingGuru.Common.Infrastructure.Outbox;
+using BookingGuru.Common.Infrastructure.Repositories;
 using BookingGuru.Modules.Mock2s.Application.Abstractions.Data;
 using BookingGuru.Modules.Mock2s.Domain.Publishes;
 using BookingGuru.Modules.Mock2s.Infrastructure.Publishes;
@@ -10,21 +9,22 @@ using System.Data.Common;
 
 namespace BookingGuru.Modules.Mock2s.Infrastructure.Database;
 
-public sealed class Mock2sDbContext(DbContextOptions<Mock2sDbContext> options) : DbContext(options), IUnitOfWork
+public sealed class Mock2sDbContext : ModuleDbContext, IUnitOfWork
 {
     internal DbSet<Publish> Published { get; set; }
+
+    public Mock2sDbContext(DbContextOptions<Mock2sDbContext> options)
+        : base(options, builder => builder.WithDefaultSchema(Schemas.Mock2s)
+            .WithInbox()
+            .WithOutbox())
+    {
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         ArgumentNullException.ThrowIfNull(modelBuilder);
 
-        modelBuilder.HasDefaultSchema(Schemas.Mock2s);
-
-        // Default tables
-        modelBuilder.ApplyConfiguration(new OutboxMessageConfiguration());
-        modelBuilder.ApplyConfiguration(new OutboxMessageConsumerConfiguration());
-        modelBuilder.ApplyConfiguration(new InboxMessageConfiguration());
-        modelBuilder.ApplyConfiguration(new InboxMessageConsumerConfiguration());
+        base.OnModelCreating(modelBuilder);
 
         // Module tables
         modelBuilder.ApplyConfiguration(new PublishConfiguration());

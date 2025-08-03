@@ -1,6 +1,4 @@
-﻿using BookingGuru.Common.Domain;
-
-namespace BookingGuru.Common.Infrastructure.Inbox;
+﻿namespace BookingGuru.Common.Infrastructure.Inbox;
 
 public sealed class InboxMessage
 {
