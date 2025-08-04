@@ -1,6 +1,6 @@
-﻿using BookingGuru.Modules.Mock2s.Infrastructure.Database;
-using BookingGuru.Modules.Mocks.Infrastructure.Database;
+﻿using BookingGuru.Common.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace BookingGuru.Api.Extensions;
 
@@ -10,15 +10,37 @@ internal static class MigrationExtensions
     {
         using IServiceScope scope = app.ApplicationServices.CreateScope();
 
-        ApplyMigration<MocksDbContext>(scope);
-        ApplyMigration<Mock2sDbContext>(scope);
+        var serviceProvider = scope.ServiceProvider;
+
+        var dbContextTypes = AppDomain.CurrentDomain.GetAssemblies()
+            .SelectMany(SafeGetTypes)
+            .Where(t =>
+                t.IsClass &&
+                !t.IsAbstract &&
+                typeof(DbContext).IsAssignableFrom(t) &&
+                t.IsPublic &&
+                t.GetCustomAttribute<ApplyMigrationAttribute>() != null)
+            .ToList();
+
+        foreach (var dbContextType in dbContextTypes)
+        {
+            if (serviceProvider.GetService(dbContextType) is DbContext context)
+            {
+                context.Database.Migrate();
+            }
+        }
     }
 
-    private static void ApplyMigration<TDbContext>(IServiceScope scope)
-        where TDbContext : DbContext
+    // Prevent ReflectionTypeLoadException from breaking the scan
+    private static IEnumerable<Type> SafeGetTypes(Assembly assembly)
     {
-        using TDbContext context = scope.ServiceProvider.GetRequiredService<TDbContext>();
-
-        context.Database.Migrate();
+        try
+        {
+            return assembly.GetTypes();
+        }
+        catch (ReflectionTypeLoadException ex)
+        {
+            return ex.Types.Where(t => t is not null)!;
+        }
     }
 }

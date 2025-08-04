@@ -1,6 +1,5 @@
 ﻿using BookingGuru.Common.Application.EventBus;
 using BookingGuru.Common.Application.Messaging;
-using BookingGuru.Common.Application.Repositories;
 using BookingGuru.Common.Infrastructure.Outbox;
 using BookingGuru.Common.Infrastructure.Repositories;
 using BookingGuru.Common.Presentation.Endpoints;
@@ -56,7 +55,7 @@ public static class MocksModule
 
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<MocksDbContext>());
 
-        services.AddRepositories();
+        services.AddGenericRepositoriesFromAssembly<MocksDbContext>();
 
         services.Configure<OutboxOptions>(configuration.GetSection("Mocks:Outbox"));
 
@@ -112,19 +111,5 @@ public static class MocksModule
 
             services.Decorate(integrationEventHandler, closedIdempotentHandler);
         }
-    }
-
-    private static void AddRepositories(this IServiceCollection services)
-    {
-        services.AddGenericRepositoriesFromAssembly<MocksDbContext>();
-
-        services.Scan(scan => scan
-            .FromAssemblyOf<MocksDbContext>()
-            .AddClasses(c => c.AssignableTo<IDecoratedRepository>())
-            .As(type => type
-                .GetInterfaces()
-                .Where(i => i != typeof(IDecoratedRepository)))
-            .WithTransientLifetime()
-        );
     }
 }

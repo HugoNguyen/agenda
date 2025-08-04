@@ -7,7 +7,7 @@ namespace BookingGuru.Common.Infrastructure.Repositories;
 
 public class RepositoryBase<TDbContext, TEntity, TPrimaryKey>
     : IRepository<TEntity, TPrimaryKey>
-    where TDbContext : DbContext
+    where TDbContext : ModuleDbContext
     where TEntity : class, IEntity<TPrimaryKey>
 {
     protected TDbContext _dbContext;
