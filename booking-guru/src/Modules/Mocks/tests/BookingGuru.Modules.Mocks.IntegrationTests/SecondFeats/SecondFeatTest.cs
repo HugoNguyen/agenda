@@ -9,21 +9,24 @@ public class SecondFeatTest : BaseIntegrationTest
     public SecondFeatTest(IntegrationTestWebAppFactory factory)
         : base(factory)
     {
-        
     }
 
-    //[Fact]
-    //public async Task Should_SecondEntityHasUser_AfterInserting()
-    //{
-    //    var user = new User { UserName = Faker.Name.FirstName() };
-    //    var secondEntity = new SecondEntity { Field1 = Faker.Name.LastName(), CreationTime = DateTime.Now, CreatorUser = user };
+    [Fact]
+    public async Task Should_SecondEntityHasUser_AfterInserting()
+    {
+        var user = new User(Guid.NewGuid())
+        {
+            UserName = Faker.Name.FirstName(),
+        };
 
-    //    DbContext.SecondEntities.Add(secondEntity);
+        var secondEntity = new SecondEntity(Guid.NewGuid()) { Field1 = Faker.Name.LastName(), CreationTime = DateTime.Now, CreatorUser = user };
 
-    //    await DbContext.SaveChangesAsync();
+        DbContext.SecondEntities.Add(secondEntity);
 
-    //    var retrieve = await DbContext.SecondEntities.FindAsync(secondEntity.Id);
+        await DbContext.SaveChangesAsync();
 
-    //    retrieve.CreatorUserId.Should().Be(user.Id);
-    //}
+        var retrieve = await DbContext.SecondEntities.FindAsync(secondEntity.Id);
+
+        retrieve.CreatorUserId.Should().Be(user.Id);
+    }
 }

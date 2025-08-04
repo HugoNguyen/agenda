@@ -2,7 +2,7 @@
 
 namespace BookingGuru.Common.Domain.Entities;
 
-public abstract class DomainAuditedEntity<TPrimaryKey, TUserPrimaryKey> : DomainCreationAuditedEntity<TPrimaryKey, TUserPrimaryKey>, IAudited<TUserPrimaryKey>
+public abstract class DomainAuditedEntity<TPrimaryKey> : DomainCreationAuditedEntity<TPrimaryKey>, IAudited
 {
     protected DomainAuditedEntity() { }
 
@@ -16,11 +16,11 @@ public abstract class DomainAuditedEntity<TPrimaryKey, TUserPrimaryKey> : Domain
     /// <summary>
     /// Last modifier user of this entity.
     /// </summary>
-    public virtual TUserPrimaryKey? LastModifierUserId { get; set; }
+    public virtual Guid? LastModifierUserId { get; set; }
 }
 
-public abstract class DomainAuditedEntity<TPrimaryKey, TUser, TUserPrimaryKey> : DomainCreationAuditedEntity<TPrimaryKey, TUser, TUserPrimaryKey>, IAudited<TUserPrimaryKey>
-    where TUser : IEntity<TUserPrimaryKey>
+public abstract class DomainAuditedEntity<TPrimaryKey, TUser> : DomainCreationAuditedEntity<TPrimaryKey, TUser>, IAudited
+    where TUser : IEntity<Guid>
 {
     protected DomainAuditedEntity() { }
 
@@ -34,7 +34,7 @@ public abstract class DomainAuditedEntity<TPrimaryKey, TUser, TUserPrimaryKey> :
     /// <summary>
     /// Last modifier user of this entity.
     /// </summary>
-    public virtual TUserPrimaryKey? LastModifierUserId { get; set; }
+    public virtual Guid? LastModifierUserId { get; set; }
 
     public virtual TUser? LastModifierUser { get; set; }
 }

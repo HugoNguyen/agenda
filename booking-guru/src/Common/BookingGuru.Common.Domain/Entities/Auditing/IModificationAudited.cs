@@ -5,12 +5,12 @@
 //     This interface is implemented by entities that is wanted to store modification
 //     information (who and when modified lastly). Properties are automatically set
 //     when updating the Domain.Entities.IEntity.
-public interface IModificationAudited<TUserPrimaryKey> : IHasModificationTime
+public interface IModificationAudited : IHasModificationTime
 {
     //
     // Summary:
     //     Last modifier user for this entity.
-    TUserPrimaryKey? LastModifierUserId { get; set; }
+    Guid? LastModifierUserId { get; set; }
 }
 
 //
@@ -21,7 +21,7 @@ public interface IModificationAudited<TUserPrimaryKey> : IHasModificationTime
 // Type parameters:
 //   TUser:
 //     Type of the user
-public interface IModificationAudited<TUser, TUserPrimaryKey> : IModificationAudited<TUserPrimaryKey> where TUser : IEntity<TUserPrimaryKey>
+public interface IModificationAudited<TUser> : IModificationAudited where TUser : IEntity<Guid>
 {
     //
     // Summary:

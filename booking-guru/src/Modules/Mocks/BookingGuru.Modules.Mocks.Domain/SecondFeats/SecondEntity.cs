@@ -2,8 +2,8 @@
 
 namespace BookingGuru.Modules.Mocks.Domain.SecondFeats;
 
-public sealed class SecondEntity : FullAuditedEntity<Guid, User, Guid>
+public sealed class SecondEntity : FullAuditedEntity<Guid, User>
 {
-    private SecondEntity() { }
+    public SecondEntity(Guid id) : base(id) { }
     public required string Field1 { get; set; }
 }

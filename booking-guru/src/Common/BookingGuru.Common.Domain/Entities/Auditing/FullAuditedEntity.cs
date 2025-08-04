@@ -1,6 +1,6 @@
 ﻿namespace BookingGuru.Common.Domain.Entities.Auditing;
 
-public abstract class FullAuditedEntity<TPrimaryKey, TUserPrimaryKey> : AuditedEntity<TPrimaryKey, TUserPrimaryKey>, IFullAudited<TUserPrimaryKey>
+public abstract class FullAuditedEntity<TPrimaryKey> : AuditedEntity<TPrimaryKey>, IFullAudited
 {
     protected FullAuditedEntity() { }
 
@@ -14,7 +14,7 @@ public abstract class FullAuditedEntity<TPrimaryKey, TUserPrimaryKey> : AuditedE
     /// <summary>
     /// Which user deleted this entity?
     /// </summary>
-    public virtual TUserPrimaryKey? DeleterUserId { get; set; }
+    public virtual Guid? DeleterUserId { get; set; }
 
     /// <summary>
     /// Deletion time of this entity.
@@ -22,8 +22,8 @@ public abstract class FullAuditedEntity<TPrimaryKey, TUserPrimaryKey> : AuditedE
     public virtual DateTimeOffset? DeletionTime { get; set; }
 }
 
-public abstract class FullAuditedEntity<TPrimaryKey, TUser, TUserPrimaryKey> : AuditedEntity<TPrimaryKey, TUser, TUserPrimaryKey>, IFullAudited<TUserPrimaryKey>
-    where TUser : IEntity<TUserPrimaryKey>
+public abstract class FullAuditedEntity<TPrimaryKey, TUser> : AuditedEntity<TPrimaryKey, TUser>, IFullAudited
+    where TUser : IEntity<Guid>
 {
     protected FullAuditedEntity() { }
 
@@ -37,7 +37,7 @@ public abstract class FullAuditedEntity<TPrimaryKey, TUser, TUserPrimaryKey> : A
     /// <summary>
     /// Which user deleted this entity?
     /// </summary>
-    public virtual TUserPrimaryKey? DeleterUserId { get; set; }
+    public virtual Guid? DeleterUserId { get; set; }
 
     /// <summary>
     /// Deletion time of this entity.

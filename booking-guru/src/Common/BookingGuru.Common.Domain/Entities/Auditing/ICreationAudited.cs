@@ -5,12 +5,8 @@
 //     This interface is implemented by entities that is wanted to store creation information
 //     (who and when created). Creation time and creator user are automatically set
 //     when saving Domain.Entities.Entity to database.
-public interface ICreationAudited<TUserPrimaryKey> : IHasCreationTime
+public interface ICreationAudited : IHasCreationTime, IMayHaveCreator
 {
-    //
-    // Summary:
-    //     Id of the creator user of this entity.
-    TUserPrimaryKey? CreatorUserId { get; set; }
 }
 
 //
@@ -21,10 +17,6 @@ public interface ICreationAudited<TUserPrimaryKey> : IHasCreationTime
 // Type parameters:
 //   TUser:
 //     Type of the user
-public interface ICreationAudited<TUser, TUserPrimaryKey> : ICreationAudited<TUserPrimaryKey> where TUser : IEntity<TUserPrimaryKey>
+public interface ICreationAudited<TUser> : ICreationAudited, IMayHaveCreator<TUser> where TUser : IEntity<Guid>
 {
-    //
-    // Summary:
-    //     Reference to the creator user of this entity.
-    TUser CreatorUser { get; set; }
 }

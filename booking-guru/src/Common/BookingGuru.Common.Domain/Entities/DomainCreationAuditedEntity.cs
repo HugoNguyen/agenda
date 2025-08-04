@@ -2,7 +2,7 @@
 
 namespace BookingGuru.Common.Domain.Entities;
 
-public abstract class DomainCreationAuditedEntity<TPrimaryKey, TUserPrimaryKey> : DomainEntity<TPrimaryKey>, ICreationAudited<TUserPrimaryKey>
+public abstract class DomainCreationAuditedEntity<TPrimaryKey> : DomainEntity<TPrimaryKey>, ICreationAudited
 {
     protected DomainCreationAuditedEntity()
     {
@@ -15,11 +15,11 @@ public abstract class DomainCreationAuditedEntity<TPrimaryKey, TUserPrimaryKey> 
     /// <summary>
     /// Creator of this entity.
     /// </summary>
-    public virtual TUserPrimaryKey? CreatorUserId { get; set; }
+    public virtual Guid? CreatorUserId { get; set; }
 }
 
-public abstract class DomainCreationAuditedEntity<TPrimaryKey, TUser, TUserPrimaryKey> : DomainCreationAuditedEntity<TPrimaryKey, TUserPrimaryKey>
-    where TUser : IEntity<TUserPrimaryKey>
+public abstract class DomainCreationAuditedEntity<TPrimaryKey, TUser> : DomainCreationAuditedEntity<TPrimaryKey>
+    where TUser : IEntity<Guid>
 {
     protected DomainCreationAuditedEntity()
     {

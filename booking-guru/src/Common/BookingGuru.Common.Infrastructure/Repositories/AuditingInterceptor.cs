@@ -37,11 +37,20 @@ public sealed class AuditingInterceptor : SaveChangesInterceptor
             if (entry.State == EntityState.Added && entry.Entity is IHasCreationTime auditable)
             {
                 auditable.CreationTime = now;
+
+                if (auditable is IMayHaveCreator user)
+                {
+                    user.CreatorUserId = currentUserId;
+                }
             }
 
             if (entry.State == EntityState.Modified && entry.Entity is IHasModificationTime auditableModified)
             {
                 auditableModified.LastModificationTime = now;
+                if (auditableModified is IAudited user)
+                {
+                    user.LastModifierUserId = currentUserId;
+                }
             }
 
             if (entry.State == EntityState.Deleted && entry.Entity is IHasDeletionTime softDeletable)
@@ -49,6 +58,10 @@ public sealed class AuditingInterceptor : SaveChangesInterceptor
                 entry.State = EntityState.Modified;
                 softDeletable.DeletionTime = now;
                 softDeletable.IsDeleted = true;
+                if (softDeletable is IFullAudited user)
+                {
+                    user.DeleterUserId = currentUserId;
+                }
             }
         }
 
