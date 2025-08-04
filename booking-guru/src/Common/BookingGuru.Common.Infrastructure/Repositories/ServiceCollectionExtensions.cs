@@ -41,6 +41,21 @@ public static class ServiceCollectionExtensions
             services.AddTransient(simpleRepoInterface, implementationType);
         }
 
+        services.AddDecoratedRepositories<TDbContext>();
+
         return services;
+    }
+
+    private static void AddDecoratedRepositories<TDbContext>(this IServiceCollection services)
+        where TDbContext : DbContext
+    {
+        services.Scan(scan => scan
+            .FromAssemblyOf<TDbContext>()
+            .AddClasses(c => c.AssignableTo<IDecoratedRepository>())
+            .As(type => type
+                .GetInterfaces()
+                .Where(i => i != typeof(IDecoratedRepository)))
+            .WithTransientLifetime()
+        );
     }
 }

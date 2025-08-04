@@ -13,6 +13,7 @@ using System.Data.Common;
 
 namespace BookingGuru.Modules.Mocks.Infrastructure.Database;
 
+[ApplyMigration]
 public sealed class MocksDbContext : ModuleDbContext, IUnitOfWork
 {
     internal DbSet<FirstEntity> FirstEntities { get; set; }

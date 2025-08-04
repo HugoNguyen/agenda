@@ -9,6 +9,7 @@ using System.Data.Common;
 
 namespace BookingGuru.Modules.Mock2s.Infrastructure.Database;
 
+[ApplyMigration]
 public sealed class Mock2sDbContext : ModuleDbContext, IUnitOfWork
 {
     internal DbSet<Publish> Published { get; set; }
