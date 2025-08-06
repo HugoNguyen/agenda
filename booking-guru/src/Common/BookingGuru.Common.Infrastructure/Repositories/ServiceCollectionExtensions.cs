@@ -1,4 +1,5 @@
 ﻿using BookingGuru.Common.Application.Repositories;
+using BookingGuru.Common.Domain.Attributes;
 using BookingGuru.Common.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -51,10 +52,8 @@ public static class ServiceCollectionExtensions
     {
         services.Scan(scan => scan
             .FromAssemblyOf<TDbContext>()
-            .AddClasses(c => c.AssignableTo<IDecoratedRepository>())
-            .As(type => type
-                .GetInterfaces()
-                .Where(i => i != typeof(IDecoratedRepository)))
+            .AddClasses(c => c.WithAttribute<ModularRepositoryAttribute>().Where(t => !t.IsAbstract))
+            .AsImplementedInterfaces()
             .WithTransientLifetime()
         );
     }

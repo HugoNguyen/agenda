@@ -32,7 +32,9 @@ public sealed class AuditingInterceptor : SaveChangesInterceptor
         foreach (var entry in entries)
         {
             var now = _clock.Now;
-            var currentUserId = _httpContextAccessor.HttpContext?.User.GetUserId();
+            Guid? currentUserId = _httpContextAccessor.HttpContext?.User?.Identity?.IsAuthenticated == true
+                ? _httpContextAccessor.HttpContext?.User.GetUserId()
+                : null;
 
             if (entry.State == EntityState.Added && entry.Entity is IHasCreationTime auditable)
             {

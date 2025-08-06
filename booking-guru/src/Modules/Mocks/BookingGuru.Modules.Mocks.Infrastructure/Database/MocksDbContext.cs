@@ -1,4 +1,5 @@
 ﻿
+using BookingGuru.Common.Domain.Attributes;
 using BookingGuru.Common.Infrastructure.Repositories;
 using BookingGuru.Modules.Mocks.Application.Abstractions.Data;
 using BookingGuru.Modules.Mocks.Domain.FirstFeats;
