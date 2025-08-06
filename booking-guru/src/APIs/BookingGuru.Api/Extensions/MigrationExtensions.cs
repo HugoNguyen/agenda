@@ -1,4 +1,5 @@
-﻿using BookingGuru.Common.Infrastructure.Repositories;
+﻿using BookingGuru.Common.Domain.Attributes;
+using BookingGuru.Common.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
