@@ -11,7 +11,24 @@ namespace BookingGuru.Common.Infrastructure.Repositories;
 /// </summary>
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddGenericRepositoriesFromAssembly<TDbContext>(this IServiceCollection services)
+    public static IServiceCollection AddModuleDbContext<TDbContext>(
+        this IServiceCollection services,
+        Action<IServiceProvider, DbContextOptionsBuilder> options)
+        where TDbContext : DbContext
+    {
+        // Register the DbContext
+        services.AddDbContext<TDbContext>(options);
+
+        // Automatically add GenericRepositories
+        services.AddGenericRepositories<TDbContext>();
+
+        // Automatically add decorated repositoories
+        services.AddDecoratedRepositories<TDbContext>();
+
+        return services;
+    }
+
+    private static IServiceCollection AddGenericRepositories<TDbContext>(this IServiceCollection services)
          where TDbContext : DbContext
     {
         using var serviceProvider = services.BuildServiceProvider();
@@ -41,8 +58,6 @@ public static class ServiceCollectionExtensions
             services.AddTransient(genericRepoInterface, implementationType);
             services.AddTransient(simpleRepoInterface, implementationType);
         }
-
-        services.AddDecoratedRepositories<TDbContext>();
 
         return services;
     }

@@ -1,4 +1,5 @@
 ﻿using BookingGuru.Common.Application.Timing;
+using BookingGuru.Common.Domain.Entities;
 using BookingGuru.Common.Domain.Entities.Auditing;
 using BookingGuru.Common.Infrastructure.Authentication;
 using Microsoft.AspNetCore.Http;
@@ -49,18 +50,22 @@ public sealed class AuditingInterceptor : SaveChangesInterceptor
             if (entry.State == EntityState.Modified && entry.Entity is IHasModificationTime auditableModified)
             {
                 auditableModified.LastModificationTime = now;
-                if (auditableModified is IAudited user)
+                if (auditableModified is IModificationAudited user)
                 {
                     user.LastModifierUserId = currentUserId;
                 }
             }
 
-            if (entry.State == EntityState.Deleted && entry.Entity is IHasDeletionTime softDeletable)
+            if (entry.State == EntityState.Deleted && entry.Entity is ISoftDelete softDeletable)
             {
                 entry.State = EntityState.Modified;
-                softDeletable.DeletionTime = now;
+                
                 softDeletable.IsDeleted = true;
-                if (softDeletable is IFullAudited user)
+                if (softDeletable is IHasDeletionTime auditableDeletionTime)
+                {
+                    auditableDeletionTime.DeletionTime = now;
+                }
+                if (softDeletable is IDeletionAudited user)
                 {
                     user.DeleterUserId = currentUserId;
                 }

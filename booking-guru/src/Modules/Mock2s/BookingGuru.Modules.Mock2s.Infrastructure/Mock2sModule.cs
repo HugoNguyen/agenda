@@ -37,18 +37,32 @@ public static class Mock2sModule
 
     private static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDbContext<Mock2sDbContext>((sp, options) =>
-            options
-                .UseSqlServer(
-                    configuration.GetConnectionString("Database"),
-                    options => options.MigrationsHistoryTable(HistoryRepository.DefaultTableName, Schemas.Mock2s))
-                .UseCamelCaseNamingConvention()
-                .AddInterceptors(sp.GetRequiredService<InsertOutboxMessagesInterceptor>())
-                .AddInterceptors(sp.GetRequiredService<AuditingInterceptor>()));
+        //services.AddModuleDbContext<Mock2sDbContext>(
+        //    (sp, options) =>
+        //        options
+        //            .UseSqlServer(
+        //                configuration.GetConnectionString("Database"),
+        //                options => options.MigrationsHistoryTable(HistoryRepository.DefaultTableName, Schemas.Mock2s))
+        //            .UseCamelCaseNamingConvention()
+        //            .AddInterceptors(sp.GetRequiredService<InsertOutboxMessagesInterceptor>())
+        //            .AddInterceptors(sp.GetRequiredService<AuditingInterceptor>()),
+        //    (options) =>
+        //        options
+        //            .UseSqlServer(
+        //                configuration.GetConnectionString("Database"))
+        //            .UseCamelCaseNamingConvention());
+
+        services.AddModuleDbContext<Mock2sDbContext>(
+            (sp, options) =>
+                options
+                    .UseSqlServer(
+                        configuration.GetConnectionString("Database"),
+                        options => options.MigrationsHistoryTable(HistoryRepository.DefaultTableName, Schemas.Mock2s))
+                    .UseCamelCaseNamingConvention()
+                    .AddInterceptors(sp.GetRequiredService<InsertOutboxMessagesInterceptor>())
+                    .AddInterceptors(sp.GetRequiredService<AuditingInterceptor>()));
 
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<Mock2sDbContext>());
-
-        services.AddGenericRepositoriesFromAssembly<Mock2sDbContext>();
 
         services.Configure<OutboxOptions>(configuration.GetSection("Mock2s:Outbox"));
 

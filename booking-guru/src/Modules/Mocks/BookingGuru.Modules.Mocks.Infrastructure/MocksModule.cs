@@ -44,7 +44,7 @@ public static class MocksModule
 
     private static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDbContext<MocksDbContext>((sp, options) =>
+        services.AddModuleDbContext<MocksDbContext>((sp, options) =>
             options
                 .UseSqlServer(
                     configuration.GetConnectionString("Database"),
@@ -54,8 +54,6 @@ public static class MocksModule
                 .AddInterceptors(sp.GetRequiredService<AuditingInterceptor>()));
 
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<MocksDbContext>());
-
-        services.AddGenericRepositoriesFromAssembly<MocksDbContext>();
 
         services.Configure<OutboxOptions>(configuration.GetSection("Mocks:Outbox"));
 
