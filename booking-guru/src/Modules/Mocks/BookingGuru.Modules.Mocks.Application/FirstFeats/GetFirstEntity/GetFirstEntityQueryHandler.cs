@@ -1,5 +1,4 @@
 ﻿using BookingGuru.Common.Application.Messaging;
-using BookingGuru.Common.Application.Repositories;
 using BookingGuru.Common.Domain;
 using BookingGuru.Modules.Mocks.Application.Repositories;
 using BookingGuru.Modules.Mocks.Domain.FirstFeats;

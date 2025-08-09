@@ -2,7 +2,7 @@
 
 namespace BookingGuru.Modules.Mocks.Application.PublishClones.CreatePublishClone;
 
-internal class CreatePublishCloneCommandValidator : AbstractValidator<CreatePublishCloneCommand>
+internal sealed class CreatePublishCloneCommandValidator : AbstractValidator<CreatePublishCloneCommand>
 {
     public CreatePublishCloneCommandValidator()
     {
